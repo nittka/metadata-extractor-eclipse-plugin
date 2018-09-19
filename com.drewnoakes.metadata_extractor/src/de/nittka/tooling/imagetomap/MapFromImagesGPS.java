@@ -1,4 +1,4 @@
-package com.drewnoakes.metadataextractor;
+package de.nittka.tooling.imagetomap;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +28,7 @@ public class MapFromImagesGPS {
 			return;
 		}
 		try {
+			System.out.println("processing "+folder.getAbsolutePath());
 			GpsJsonCreator visitor = new GpsJsonCreator();
 			Files.walkFileTree(folder.toPath(), visitor);
 			writeGpsDataFiles(visitor);
@@ -51,13 +52,19 @@ public class MapFromImagesGPS {
 		b.append("\n];");
 		File markerFile=new File("markers.js");
 		Files.write(markerFile.toPath(), b.toString().getBytes());
+		if(data.isEmpty()){
+			System.err.println("no files with gps data found");
+		}
 	}
 
 	private static void writeMainHtml() throws IOException{
+		File htmlFile=new File("imageGps.html");
+		if(htmlFile.exists()){
+			return;
+		}
 		InputStream stream = MapFromImagesGPS.class.getClassLoader().getResourceAsStream("ol2Marker.html");
 		byte[] content=new byte[stream.available()];
 		stream.read(content);
-		File htmlFile=new File("imageGps.html");
 		Files.write(htmlFile.toPath(), content);
 	}
 
