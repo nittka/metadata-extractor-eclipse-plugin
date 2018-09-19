@@ -24,8 +24,16 @@
       var obj = gpsMarkers[i];
       addMarker(obj["id"], obj["lon"], obj["lat"], obj["title"], obj["imgLoc"]);
     }
-    var zoom=3;
-    map.setCenter(bounds.getCenterLonLat(), zoom);
+
+    if(gpsMarkers.length>0){
+      var zoom=map.getZoomForExtent(markers.getDataExtent())
+      if(zoom > 11){
+        zoom = 11;
+      }
+      map.setCenter(bounds.getCenterLonLat(), zoom);
+    } else {
+      map.setCenter(bounds.getCenterLonLat(), 3);
+    }
 
     function addMarker(id, lon, lat, title, imgLocation){
       var lonLat = new OpenLayers.LonLat(lon,lat)

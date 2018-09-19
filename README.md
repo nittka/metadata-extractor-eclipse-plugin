@@ -23,3 +23,5 @@ I assume you called the exported jar `imagesOnMap.jar`
 On the command line call `java -jar imagesOnMap.jar <folder>` where folder is the folder to search for images.
 
 In Eclipse you can simply start the `MapFromImagesGPS` launch configuration after defining the root folder in the program arguments.
+
+You can now open the `imageGps.html` file. Make sure Javascript is enabled (for local files as well).
