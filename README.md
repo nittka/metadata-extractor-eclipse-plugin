@@ -1,10 +1,25 @@
-# metadata-extractor-eclipse-plugin
-A simple Eclipse plugin wrapper for https://github.com/drewnoakes/metadata-extractor.
+# folderMap-Branch
+The intention is to show where the pictures in a particular folder were taken on a map.
 
-Rather than packaging the metadata-extractor jar with each new version of your plugin, you can declare a dependency to the wrapper plugin, which simply exports all packages.
+The basic Map rendering is based on
+https://wiki.openstreetmap.org/wiki/DE:OpenLayers_Marker_Example
 
-The jars are were from maven central.
+The popup opening and closing is based on
+https://stackoverflow.com/questions/8523446/openlayers-simple-mouseover-on-marker
 
-https://mvnrepository.com/artifact/com.drewnoakes/metadata-extractor/2.11.0
+Given a folder, all files are checked for GPS coordinates.
+If present they are added to a list.
+The html file then goes over that list, adds markers and popups.
 
-https://mvnrepository.com/artifact/com.adobe.xmp/xmpcore/5.1.3
+## creating the runnable jar
+
+In Eclipse, use `Export`->`Java`->`Runnable JAR file`.
+Choose the MapFromImagesGPS launch configuration from the main project and check the `Extract required libraries into generated JAR` option.
+
+I assume you called the exported jar `imagesOnMap.jar`
+
+## Running the jar
+
+On the command line call `java -jar imagesOnMap.jar <folder>` where folder is the folder to search for images.
+
+In Eclipse you can simply start the `MapFromImagesGPS` launch configuration after defining the root folder in the program arguments.

@@ -1,0 +1,48 @@
+<html>
+<head>
+  <style>
+   .popup img{
+    max-width:200px;
+    max-height:200px;
+   }
+  </style>
+</head>
+<body>
+  <div id="mapdiv"></div>
+  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+  <script src="markers.js"></script>
+  <script>
+    map = new OpenLayers.Map("mapdiv");
+    map.addLayer(new OpenLayers.Layer.OSM());
+
+
+    var markers = new OpenLayers.Layer.Markers( "Markers" );
+    map.addLayer(markers);
+
+    var bounds =new OpenLayers.Bounds();
+    for (var i = 0; i < gpsMarkers.length; i++){
+      var obj = gpsMarkers[i];
+      addMarker(obj["id"], obj["lon"], obj["lat"], obj["title"], obj["imgLoc"]);
+    }
+    var zoom=3;
+    map.setCenter(bounds.getCenterLonLat(), zoom);
+
+    function addMarker(id, lon, lat, title, imgLocation){
+      var lonLat = new OpenLayers.LonLat(lon,lat)
+          .transform(
+            new OpenLayers.Projection("EPSG:4326"), // Transformation aus dem Koordinatensystem WGS 1984
+            map.getProjectionObject() // in das Koordinatensystem 'Spherical Mercator Projection'
+          );
+      bounds.extend(lonLat);
+      var marker=new OpenLayers.Marker(lonLat);
+      markers.addMarker(marker);
+      marker.events.register('mouseover', marker, function() {
+        var popup = new OpenLayers.Popup.FramedCloud(id, lonLat, null, 
+        '<div class="popup"><div>'+title+'</div><img src="'+imgLocation+'" title="'+imgLocation+'"></div>', 
+        null, false);
+        map.addPopup(popup);
+        marker.events.register('mouseout', marker, setTimeout( function() { popup.destroy(); }, 4000));
+      });
+    }
+  </script>
+</body></html>
